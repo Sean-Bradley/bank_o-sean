@@ -25,15 +25,15 @@ class Listener(balance_pb2_grpc.BalanceServiceServicer):
 
     def createBalance(self, request, context):
         amount = SAFE.create_balance(request.id)
-        return balance_pb2.Balance(amount=amount)
+        return balance_pb2.Balance(amount=amount["balance"])
 
     def getBalance(self, request, context):
         amount = SAFE.get_balance(request.id)
-        return balance_pb2.Balance(amount=amount)
+        return balance_pb2.Balance(amount=amount["balance"])
 
     def adjustBalance(self, request, context):
         amount = SAFE.adjust_balance(request.id, request.amount)
-        return balance_pb2.Balance(amount=amount)
+        return balance_pb2.Balance(amount=amount["balance"])
 
 
 def start_bank():
@@ -46,23 +46,16 @@ def start_bank():
     server.start()
     try:
         while True:
-            print("Bank O'Sean Running : threadcount %i" % (threading.active_count()))
+            print(
+                "Bank O'Sean Running : threadcount %i : Balance Count: %i"
+                % (threading.active_count(), SAFE.length())
+            )
             time.sleep(10)
     except KeyboardInterrupt:
         print("KeyboardInterrupt")
         server.stop(0)
 
 
-def create_balances():
-    """fill the bank with fake balances that we can read and write to"""
-
-    for _x in range(100):
-        balance_id = uuid.uuid4()
-        SAFE.create_balance(balance_id)
-        SAFE.adjust_balance(balance_id, random.randint(0, 1000))
-        print(SAFE.get_balance(balance_id))
-
-
 if __name__ == "__main__":
-    create_balances()
+    # create_balances()
     start_bank()
