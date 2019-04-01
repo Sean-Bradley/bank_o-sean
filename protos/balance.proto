@@ -1,0 +1,26 @@
+//The balance proto for the Bank O'Sean
+//to recompile this proto run
+//python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/balance.proto
+syntax = "proto3";
+
+//The Balance RPC Service
+service BalanceService {
+    //get a balance by token
+    rpc getBalance (Id) returns (Balance) {}
+    //adjust a balance
+    rpc adjustBalance (BalanceAdjustment) returns (Balance) {}
+}
+
+message Id {
+    string id = 1;
+}
+
+message BalanceAdjustment {
+    string id = 1;
+    int32 amount = 2;
+    string authToken = 3;
+}
+
+message Balance {
+    int32 amount = 1;
+}
