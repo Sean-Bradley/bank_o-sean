@@ -1,4 +1,5 @@
 # The Bank O'Sean
-For every job interview I go for, I am expected to be able to reinvent the bank. So lets do it. I get paid nothing for this, so donations welcome.
+
+Note that, this is not a real bank, and you'd be silly to use it as one, it's just a project I will use for further tutorials i'll create.
 
 This is written in Python3.7.2 and uses gRPC
