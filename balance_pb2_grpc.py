@@ -14,6 +14,11 @@ class BalanceServiceStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.createBalance = channel.unary_unary(
+        '/BalanceService/createBalance',
+        request_serializer=balance__pb2.Id.SerializeToString,
+        response_deserializer=balance__pb2.Balance.FromString,
+        )
     self.getBalance = channel.unary_unary(
         '/BalanceService/getBalance',
         request_serializer=balance__pb2.Id.SerializeToString,
@@ -29,6 +34,13 @@ class BalanceServiceStub(object):
 class BalanceServiceServicer(object):
   """The Balance RPC Service
   """
+
+  def createBalance(self, request, context):
+    """creates a new account in the bank. returns an existing account if already exists
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def getBalance(self, request, context):
     """get a balance by token
@@ -47,6 +59,11 @@ class BalanceServiceServicer(object):
 
 def add_BalanceServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'createBalance': grpc.unary_unary_rpc_method_handler(
+          servicer.createBalance,
+          request_deserializer=balance__pb2.Id.FromString,
+          response_serializer=balance__pb2.Balance.SerializeToString,
+      ),
       'getBalance': grpc.unary_unary_rpc_method_handler(
           servicer.getBalance,
           request_deserializer=balance__pb2.Id.FromString,

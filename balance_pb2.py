@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rbalance.proto\"\x10\n\x02Id\x12\n\n\x02id\x18\x01 \x01(\t\"B\n\x11\x42\x61lanceAdjustment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x11\n\tauthToken\x18\x03 \x01(\t\"\x19\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x05\x32`\n\x0e\x42\x61lanceService\x12\x1d\n\ngetBalance\x12\x03.Id\x1a\x08.Balance\"\x00\x12/\n\radjustBalance\x12\x12.BalanceAdjustment\x1a\x08.Balance\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\rbalance.proto\"\x10\n\x02Id\x12\n\n\x02id\x18\x01 \x01(\t\"B\n\x11\x42\x61lanceAdjustment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x11\n\tauthToken\x18\x03 \x01(\t\"\x19\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x05\x32\x82\x01\n\x0e\x42\x61lanceService\x12 \n\rcreateBalance\x12\x03.Id\x1a\x08.Balance\"\x00\x12\x1d\n\ngetBalance\x12\x03.Id\x1a\x08.Balance\"\x00\x12/\n\radjustBalance\x12\x12.BalanceAdjustment\x1a\x08.Balance\"\x00\x62\x06proto3')
 )
 
 
@@ -165,13 +165,22 @@ _BALANCESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=130,
-  serialized_end=226,
+  serialized_start=131,
+  serialized_end=261,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='createBalance',
+    full_name='BalanceService.createBalance',
+    index=0,
+    containing_service=None,
+    input_type=_ID,
+    output_type=_BALANCE,
+    serialized_options=None,
+  ),
   _descriptor.MethodDescriptor(
     name='getBalance',
     full_name='BalanceService.getBalance',
-    index=0,
+    index=1,
     containing_service=None,
     input_type=_ID,
     output_type=_BALANCE,
@@ -180,7 +189,7 @@ _BALANCESERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='adjustBalance',
     full_name='BalanceService.adjustBalance',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=_BALANCEADJUSTMENT,
     output_type=_BALANCE,

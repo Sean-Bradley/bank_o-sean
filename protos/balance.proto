@@ -5,6 +5,8 @@ syntax = "proto3";
 
 //The Balance RPC Service
 service BalanceService {
+    //creates a new account in the bank. returns an existing account if already exists
+    rpc createBalance (Id) returns (Balance) {}
     //get a balance by token
     rpc getBalance (Id) returns (Balance) {}
     //adjust a balance

@@ -1,39 +1,16 @@
+"""The main Bank O'Sean server.
+This is the single source of truth for all balances held at the Bank O'Sean"""
 from concurrent import futures
 import threading
 import time
+import uuid
+import random
 import grpc
 import balance_pb2
 import balance_pb2_grpc
-import random
-import uuid
+from safe import Safe
 
-
-class Borg:
-    _shared_state = {}
-
-    def __init__(self):
-        self.__dict__ = self._shared_state
-        self.safe = {}
-
-
-class Safe(Borg):
-    def __init__(self, name=None):
-        Borg.__init__(self)
-        if name is not None:
-            self.name = name
-
-    def __str__(self):
-        return "Safe(%s)" % self.name
-
-    def add_account(self, id):
-        self.safe[id] = {"balance": 0}
-
-    def get_balance(self, id):
-        return self.safe[id]
-
-    def adjust_balance(self, id, amount):
-        self.safe[id] = {"balance": amount}
-        return self.safe[id]
+SAFE = Safe()
 
 
 class Listener(balance_pb2_grpc.BalanceServiceServicer):
@@ -46,11 +23,17 @@ class Listener(balance_pb2_grpc.BalanceServiceServicer):
     def __str__(self):
         return self.__class__.__name__
 
+    def createBalance(self, request, context):
+        amount = SAFE.create_balance(request.id)
+        return balance_pb2.Balance(amount=amount)
+
     def getBalance(self, request, context):
-        return balance_pb2.Balance(amount=123)
+        amount = SAFE.get_balance(request.id)
+        return balance_pb2.Balance(amount=amount)
 
     def adjustBalance(self, request, context):
-        return balance_pb2.Balance(amount=456)
+        amount = SAFE.adjust_balance(request.id, request.amount)
+        return balance_pb2.Balance(amount=amount)
 
 
 def start_bank():
@@ -70,16 +53,16 @@ def start_bank():
         server.stop(0)
 
 
-def create_bank():
-    """fill the bank with fake accounts that we can read and write to"""
-    SAFE = Safe()
-    for x in range(100):
-        id = uuid.uuid4()
-        SAFE.add_account(id)
-        SAFE.adjust_balance(id, random.randint(0,1000))
-        print(SAFE.get_balance(id))
+def create_balances():
+    """fill the bank with fake balances that we can read and write to"""
+
+    for _x in range(100):
+        balance_id = uuid.uuid4()
+        SAFE.create_balance(balance_id)
+        SAFE.adjust_balance(balance_id, random.randint(0, 1000))
+        print(SAFE.get_balance(balance_id))
 
 
 if __name__ == "__main__":
-    create_bank()
+    create_balances()
     start_bank()
